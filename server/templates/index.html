@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PetVerse 🐾 | Adopt. Love. Repeat.</title>
+
+  <!-- ✅ Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ✅ Correct Flask paths for CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <!-- ✅ Scripts (Flask-compatible) -->
+  <script src="{{ url_for('static', filename='translation.js') }}"></script>
+  <script src="{{ url_for('static', filename='auth.js') }}"></script>
+</head>
+
+<body>
+
+  <!-- ✅ NAVBAR -->
+  <nav class="navbar">
+    <div class="logo">PetVerse 🐾</div>
+
+    <ul>
+      <li><a href="{{ url_for('home') }}" style="color:var(--primary);font-weight:600;">Home</a></li>
+      <li><a href="{{ url_for('render_page', page='pets') }}">Adopt</a></li>
+      <li><a href="{{ url_for('render_page', page='volunteer') }}">Volunteer</a></li>
+      <li><a href="{{ url_for('render_page', page='donate') }}">Donate</a></li>
+      <li><a href="{{ url_for('render_page', page='community') }}">Community</a></li>
+      <li><a href="{{ url_for('render_page', page='lost-found') }}">Lost & Found</a></li>
+
+      <li><a href="{{ url_for('render_page', page='login') }}" id="loginLink">Login / Signup</a></li>
+      <li><a href="{{ url_for('render_page', page='myadoptions') }}">My Adoptions</a></li>
+
+      <li id="logoutItem" style="display:none;">
+        <a href="javascript:void(0)" id="logoutLink" style="color:var(--secondary)">Logout</a>
+      </li>
+
+      <li>
+        <select id="languageSelect" onchange="changeLanguage(this.value)"
+                style="background:var(--primary-light);color:white;border:none;padding:0.5rem;border-radius:var(--radius);">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="kn">ಕನ್ನಡ</option>
+        </select>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ✅ HERO SECTION -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Welcome to PetVerse!</h1>
+      <p>Where every pet finds a loving home and every home finds its perfect companion</p>
+    </div>
+  </header>
+
+  <!-- ✅ FEATURES -->
+  <section class="features">
+    <div class="cards">
+
+      <div class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png">
+        <h3>Adopt a Pet</h3>
+        <p>Find your perfect furry friend.</p>
+        <a href="{{ url_for('render_page', page='pets') }}" class="card-btn">Browse Pets</a>
+      </div>
+
+      <div class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616430.png">
+        <h3>Volunteer</h3>
+        <p>Help care for animals in need.</p>
+        <a href="{{ url_for('render_page', page='volunteer') }}" class="card-btn">Get Involved</a>
+      </div>
+
+      <div class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616441.png">
+        <h3>Support</h3>
+        <p>Donate to save more lives.</p>
+        <a href="{{ url_for('render_page', page='donate') }}" class="card-btn">Donate Now</a>
+      </div>
+
+      <div class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616426.png">
+        <h3>Community</h3>
+        <p>Chat with pet lovers worldwide.</p>
+        <a href="{{ url_for('render_page', page='community') }}" class="card-btn">Join Community</a>
+      </div>
+
+      <div class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616425.png">
+        <h3>Lost & Found</h3>
+        <p>Help reunite lost pets.</p>
+        <a href="{{ url_for('render_page', page='lost-found') }}" class="card-btn">View Reports</a>
+      </div>
+
+      <div class="card">
+        <img src="https://cdn-icons-png.flaticon.com/512/616/616422.png">
+        <h3>My Adoptions</h3>
+        <p>Track all pets you’ve adopted.</p>
+        <a href="{{ url_for('render_page', page='myadoptions') }}" class="card-btn">View My Pets</a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ✅ FOOTER -->
+  <footer style="text-align:center;padding:2rem;background:var(--primary);color:white;">
+    © 2025 PetVerse — Adopt. Love. Care. 🐾
+  </footer>
+
+  <!-- ✅ FLOATING CHATBOT ICON -->
+  <div id="chatbotFloatingIcon"
+    style="width:60px;height:60px;background:linear-gradient(135deg,#9b59b6,#c39bd3);
+           border-radius:50%;position:fixed;bottom:25px;right:25px;
+           display:none;justify-content:center;align-items:center;cursor:pointer;
+           box-shadow:0 5px 15px rgba(0,0,0,0.3);z-index:9999;">
+    <span style="font-size:28px;">🤖</span>
+  </div>
+
+  <!-- ✅ CHATBOT PANEL -->
+  <div id="chatbotPanel"
+       style="width:350px;height:500px;background:white;border-radius:20px;
+              position:fixed;bottom:100px;right:25px;display:none;
+              flex-direction:column;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.25);
+              z-index:10000;">
+    
+    <div style="padding:15px;background:#9b59b6;color:white;display:flex;align-items:center;gap:10px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/620/620851.png"
+           style="width:36px;height:36px;border-radius:50%;border:2px solid white;">
+      <strong>PetVerse AI Assistant 🐾</strong>
+    </div>
+
+    <div id="chatMessagesAI" style="flex:1;padding:10px;overflow-y:auto;background:#f8f0ff;"></div>
+
+    <div style="padding:10px;background:white;display:flex;gap:8px;">
+      <input id="chatInputAI" type="text" placeholder="Type your message…"
+             style="flex:1;padding:10px;border-radius:15px;border:1px solid #d5c4e6;">
+      <button id="sendChatBtnAI"
+              style="background:#9b59b6;color:white;border:none;padding:10px 14px;border-radius:14px;">➤</button>
+    </div>
+  </div>
+
+  <!-- ✅ GLOBAL SCRIPTS -->
+  <div id="toast" class="toast"></div>
+
+  <script src="{{ url_for('static', filename='header.js') }}"></script>
+  <script src="{{ url_for('static', filename='chatbot_floating.js') }}"></script>
+
+  <script>
+    // ✅ Apply login state UI
+    document.addEventListener('DOMContentLoaded', () => {
+      updateAuthLinks();   // from auth.js
+    });
+
+    function showToast(message) {
+      const t = document.getElementById("toast");
+      t.innerText = message;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 3000);
+    }
+  </script>
+</body>
+</html>

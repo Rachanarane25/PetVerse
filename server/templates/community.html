@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community | PetVerse</title>
+
+  <!-- ✅ Fonts & CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <style>
+    /* Community Page Layout */
+    .community-container {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .chat-section {
+      background: var(--white);
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .chat-messages {
+      background: var(--background);
+      padding: 1rem;
+      border-radius: var(--radius);
+      height: 380px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+
+    .message {
+      padding: 0.8rem;
+      margin-bottom: 0.8rem;
+      border-radius: var(--radius);
+      width: fit-content;
+      max-width: 80%;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .message.other {
+      background: #eee5ff;
+    }
+
+    .message.user {
+      background: #c39bd3;
+      color: white;
+      margin-left: auto;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 0.8rem;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 0.8rem;
+      border-radius: var(--radius);
+      border: 2px solid var(--primary-light);
+    }
+
+    .chat-input button {
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      padding: 0.9rem 1.4rem;
+      border-radius: var(--radius);
+      cursor: pointer;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ NAVIGATION -->
+  <nav class="navbar">
+    <div class="logo">PetVerse 🐾</div>
+    <ul>
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('render_page', page='pets') }}">Adopt</a></li>
+      <li><a href="{{ url_for('render_page', page='volunteer') }}">Volunteer</a></li>
+      <li><a href="{{ url_for('render_page', page='donate') }}">Donate</a></li>
+      <li><a href="{{ url_for('render_page', page='community') }}" style="color: var(--primary);">Community</a></li>
+      <li><a href="{{ url_for('render_page', page='lost-found') }}">Lost & Found</a></li>
+      <li><a href="{{ url_for('render_page', page='login') }}" id="loginLink">Login / Signup</a></li>
+      <li><a href="{{ url_for('render_page', page='myadoptions') }}">My Adoptions</a></li>
+
+      <li id="logoutItem" style="display:none;">
+        <a href="javascript:void(0)" id="logoutLink" style="color: var(--secondary);">Logout</a>
+      </li>
+
+      <li>
+        <select id="languageSelect" onchange="changeLanguage(this.value)"
+          style="background: var(--primary-light); color: white; border:none; padding: 0.5rem; border-radius: var(--radius);">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="kn">ಕನ್ನಡ</option>
+        </select>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ✅ HEADER -->
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Community Chat</h1>
+      <p>Talk with other pet lovers ❤️</p>
+    </div>
+  </header>
+
+  <!-- ✅ COMMUNITY CHAT SECTION -->
+  <div class="community-container">
+    <div class="chat-section">
+      <h2>Public Chat Room</h2>
+      <p style="margin-bottom:1rem;color:var(--text-light);">Chat with other pet owners</p>
+
+      <div id="chatMessages" class="chat-messages">
+        <div class="message other"><strong>Admin:</strong> Welcome to PetVerse Community 🐾</div>
+      </div>
+
+      <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Type your message...">
+        <button onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ FLOATING CHATBOT -->
+  <div id="chatbotFloatingIcon"
+    style="width:60px;height:60px;background:linear-gradient(135deg,#9b59b6,#c39bd3);
+    border-radius:50%;position:fixed;bottom:25px;right:25px;display:none;
+    justify-content:center;align-items:center;cursor:pointer;z-index:9999;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);">
+    <span style="font-size:28px;">🤖</span>
+  </div>
+
+  <div id="chatbotPanel"
+    style="width:350px;height:500px;background:white;border-radius:20px;position:fixed;
+    bottom:100px;right:25px;display:none;flex-direction:column;overflow:hidden;
+    box-shadow:0 8px 25px rgba(0,0,0,0.25);z-index:10000;">
+    
+    <div style="padding:15px;background:#9b59b6;color:white;display:flex;align-items:center;gap:10px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/620/620851.png"
+           style="width:36px;height:36px;border-radius:50%;border:2px solid white;">
+      <strong>PetVerse AI Assistant 🐾</strong>
+    </div>
+
+    <div id="chatMessagesAI" style="flex:1;padding:10px;overflow-y:auto;background:#f8f0ff;"></div>
+
+    <div style="padding:10px;background:white;display:flex;gap:8px;">
+      <input id="chatInputAI" type="text" placeholder="Type your message…"
+             style="flex:1;padding:10px;border-radius:15px;border:1px solid #d5c4e6;">
+      <button id="sendChatBtnAI"
+        style="background:#9b59b6;color:white;border:none;padding:10px 14px;border-radius:14px;">
+        ➤
+      </button>
+    </div>
+  </div>
+
+  <!-- ✅ GLOBAL SCRIPTS (Flask-Compatible) -->
+  <script src="{{ url_for('static', filename='auth.js') }}"></script>
+  <script src="{{ url_for('static', filename='header.js') }}"></script>
+  <script src="{{ url_for('static', filename='chatbot_floating.js') }}"></script>
+
+  <script>
+    // ✅ COMMUNITY CHAT (LOCAL ONLY)
+    function sendChat() {
+      const input = document.getElementById("chatInput");
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      const username = localStorage.getItem("petpal_user") || "Guest";
+
+      const div = document.createElement("div");
+      div.className = "message user";
+      div.innerHTML = `<strong>${username}:</strong> ${msg}`;
+      document.getElementById("chatMessages").appendChild(div);
+
+      input.value = "";
+      const container = document.getElementById("chatMessages");
+      container.scrollTop = container.scrollHeight;
+    }
+
+    document.getElementById("chatInput").addEventListener("keypress", e => {
+      if (e.key === "Enter") sendChat();
+    });
+  </script>
+
+</body>
+</html>

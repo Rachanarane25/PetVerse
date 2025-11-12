@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volunteer | PetVerse</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Flask-safe static paths -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='translations.js') }}"></script>
+</head>
+
+<body>
+  <!-- ✅ Navbar -->
+  <nav class="navbar">
+    <div class="logo">PetVerse 🐾</div>
+    <ul>
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('render_page', page='pets') }}">Adopt</a></li>
+      <li><a href="{{ url_for('render_page', page='volunteer') }}" style="color:var(--primary)">Volunteer</a></li>
+      <li><a href="{{ url_for('render_page', page='donate') }}">Donate</a></li>
+      <li><a href="{{ url_for('render_page', page='community') }}">Community</a></li>
+      <li><a href="{{ url_for('render_page', page='lost-found') }}">Lost & Found</a></li>
+      <li><a href="{{ url_for('render_page', page='login') }}" id="loginLink">Login / Signup</a></li>
+      <li><a href="{{ url_for('render_page', page='myadoptions') }}">My Adoptions</a></li>
+
+      <li id="logoutItem" style="display:none;">
+        <a href="javascript:void(0)" id="logoutLink" style="color:var(--secondary)">Logout</a>
+      </li>
+
+      <li>
+        <select id="languageSelect" onchange="changeLanguage(this.value)"
+          style="background:var(--primary-light);color:white;border:none;padding:0.5rem;border-radius:var(--radius);">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="kn">ಕನ್ನಡ</option>
+        </select>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ✅ Hero Section -->
+  <div class="hero">
+    <h1>Become a Volunteer</h1>
+    <p>Join our community and make a difference in the lives of animals 🐶🐱</p>
+  </div>
+
+  <!-- ✅ Volunteer Info -->
+  <div class="volunteer-container" style="max-width:800px;margin:2rem auto;padding:2rem;">
+    <div class="volunteer-info" style="background:white;padding:2rem;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:2rem;">
+      <h2 style="color:var(--primary);margin-bottom:1rem;">Why Volunteer With Us?</h2>
+      <p style="color:var(--text-light);line-height:1.6;margin-bottom:1.5rem;">
+        Our volunteers are the heart of PetVerse. Whether you're walking dogs, socializing cats, helping with events, or assisting with admin work, your time truly makes a difference!
+      </p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+        <div style="text-align:center;padding:1rem;background:var(--background);border-radius:var(--radius);">
+          <div style="font-size:2rem;">🐕</div>
+          <h4 style="color:var(--primary);">Animal Care</h4>
+          <p style="color:var(--text-light);font-size:0.9rem;">Feeding, grooming & walks</p>
+        </div>
+        <div style="text-align:center;padding:1rem;background:var(--background);border-radius:var(--radius);">
+          <div style="font-size:2rem;">🎪</div>
+          <h4 style="color:var(--primary);">Events</h4>
+          <p style="color:var(--text-light);font-size:0.9rem;">Help with adoption drives</p>
+        </div>
+        <div style="text-align:center;padding:1rem;background:var(--background);border-radius:var(--radius);">
+          <div style="font-size:2rem;">📋</div>
+          <h4 style="color:var(--primary);">Admin Support</h4>
+          <p style="color:var(--text-light);font-size:0.9rem;">Data entry, phone & mail</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ Volunteer Form -->
+    <div class="volunteer-form" style="background:white;padding:2rem;border-radius:var(--radius);box-shadow:var(--shadow);">
+      <h2 style="color:var(--primary);margin-bottom:1.5rem;">Volunteer Application</h2>
+
+      <form id="volunteerForm">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+          <div>
+            <label>First Name</label>
+            <input id="firstName" type="text" required style="width:100%;padding:0.8rem;border:2px solid var(--primary-light);border-radius:var(--radius);">
+          </div>
+          <div>
+            <label>Last Name</label>
+            <input id="lastName" type="text" required style="width:100%;padding:0.8rem;border:2px solid var(--primary-light);border-radius:var(--radius);">
+          </div>
+        </div>
+
+        <div style="margin-top:1rem;">
+          <label>Email</label>
+          <input id="email" type="email" required style="width:100%;padding:0.8rem;border:2px solid var(--primary-light);border-radius:var(--radius);">
+        </div>
+
+        <div style="margin-top:1rem;">
+          <label>Phone</label>
+          <input id="phone" type="tel" required style="width:100%;padding:0.8rem;border:2px solid var(--primary-light);border-radius:var(--radius);">
+        </div>
+
+        <div style="margin-top:1rem;">
+          <label>Areas of Interest</label>
+          <div style="display:flex;flex-wrap:wrap;gap:1rem;">
+            <label><input type="checkbox" value="Animal Care"> Animal Care</label>
+            <label><input type="checkbox" value="Event Support"> Event Support</label>
+            <label><input type="checkbox" value="Administrative"> Administrative</label>
+            <label><input type="checkbox" value="Transportation"> Transportation</label>
+          </div>
+        </div>
+
+        <button type="submit" style="margin-top:1.5rem;background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;padding:1rem;width:100%;border:none;border-radius:var(--radius);cursor:pointer;font-weight:600;">
+          Submit Application
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- ✅ JS -->
+  <script>
+    function showToast(msg) {
+      const toast = document.getElementById("toast");
+      toast.innerText = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    async function submitVolunteerForm(e) {
+      e.preventDefault();
+      const user = localStorage.getItem("petpal_user");
+      if (!user) {
+        showToast("Please login to submit your application 🐾");
+        return;
+      }
+
+      const interests = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(cb => cb.value);
+      const data = {
+        first_name: document.getElementById("firstName").value,
+        last_name: document.getElementById("lastName").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        interests
+      };
+
+      try {
+        const res = await fetch("/api/volunteer", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        showToast(result.message || "Thank you for volunteering!");
+        document.getElementById("volunteerForm").reset();
+      } catch (err) {
+        showToast("Submission failed. Please try again later.");
+      }
+    }
+
+    document.getElementById("volunteerForm").addEventListener("submit", submitVolunteerForm);
+  </script>
+
+  <!-- ✅ Include global scripts -->
+  <script src="{{ url_for('static', filename='header.js') }}"></script>
+  <script src="{{ url_for('static', filename='chatbot_floating.js') }}"></script>
+
+  <!-- ✅ Chatbot -->
+  <div id="chatbotFloatingIcon"
+       style="width:60px;height:60px;background:linear-gradient(135deg,#9b59b6,#c39bd3);
+       border-radius:50%;position:fixed;bottom:25px;right:25px;
+       display:none;justify-content:center;align-items:center;cursor:pointer;
+       box-shadow:0 5px 15px rgba(0,0,0,0.3);z-index:9999;">
+    <span style="font-size:28px;">🤖</span>
+  </div>
+
+  <div id="chatbotPanel"
+       style="width:350px;height:500px;background:white;border-radius:20px;
+       position:fixed;bottom:100px;right:25px;display:none;
+       flex-direction:column;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.25);
+       z-index:10000;">
+    <div style="padding:15px;background:#9b59b6;color:white;display:flex;align-items:center;gap:10px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/620/620851.png"
+           style="width:36px;height:36px;border-radius:50%;border:2px solid white;">
+      <strong>PetVerse AI Assistant 🐾</strong>
+    </div>
+    <div id="chatMessagesAI" style="flex:1;padding:10px;overflow-y:auto;background:#f8f0ff;"></div>
+    <div style="padding:10px;background:white;display:flex;gap:8px;">
+      <input id="chatInputAI" type="text" placeholder="Type your message…"
+             style="flex:1;padding:10px;border-radius:15px;border:1px solid #d5c4e6;">
+      <button id="sendChatBtnAI"
+              style="background:#9b59b6;color:white;border:none;padding:10px 14px;
+              border-radius:14px;">➤</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reset Database | PetVerse Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #8e44ad, #c39bd3);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .reset-container {
+      background: rgba(255,255,255,0.15);
+      padding: 30px 40px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background: #9b59b6;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #7d3cb5;
+      transform: scale(1.05);
+    }
+
+    #message {
+      margin-top: 20px;
+      font-weight: 500;
+      color: #fff;
+    }
+
+    .error {
+      color: #ffb3b3;
+    }
+
+    .success {
+      color: #b8ffb3;
+    }
+  </style>
+</head>
+<body>
+  <div class="reset-container">
+    <h1>⚠️ Reset Database</h1>
+    <p>This will mark all pets as available again.</p>
+    <button onclick="resetDatabase()">Reset All Adoptions</button>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    async function resetDatabase() {
+      if (!confirm("Are you sure? This will reset ALL adoptions.")) return;
+
+      try {
+        // ✅ Use relative path (Flask serves it automatically)
+        const res = await fetch("/api/reset", { method: "POST" });
+        const data = await res.json();
+
+        const msg = document.getElementById("message");
+        msg.innerText = data.message || data.error || "Unknown response";
+        msg.className = data.error ? "error" : "success";
+      } catch (err) {
+        const msg = document.getElementById("message");
+        msg.innerText = "⚠️ Error resetting database";
+        msg.className = "error";
+        console.error("Error:", err);
+      }
+    }
+  </script>
+</body>
+</html>

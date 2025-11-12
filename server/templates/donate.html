@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donate | PetVerse</title>
+
+  <!-- ✅ Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- ✅ Flask-compatible CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <!-- ✅ Flask-compatible JS -->
+  <script src="{{ url_for('static', filename='translation.js') }}"></script>
+  <script src="{{ url_for('static', filename='auth.js') }}"></script>
+
+  <style>
+    .amount-btn {
+      background: var(--background);
+      border: 2px solid var(--primary-light);
+      color: var(--text);
+      padding: 0.8rem 1.2rem;
+      border-radius: var(--radius);
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .amount-btn:hover {
+      background: var(--primary-light);
+      color: var(--white);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ Navigation -->
+  <nav class="navbar">
+    <div class="logo">PetVerse 🐾</div>
+    <ul>
+      <li><a href="{{ url_for('home') }}">Home</a></li>
+      <li><a href="{{ url_for('render_page', page='pets') }}">Adopt</a></li>
+      <li><a href="{{ url_for('render_page', page='volunteer') }}">Volunteer</a></li>
+      <li><a href="{{ url_for('render_page', page='donate') }}" style="color: var(--primary);">Donate</a></li>
+      <li><a href="{{ url_for('render_page', page='community') }}">Community</a></li>
+      <li><a href="{{ url_for('render_page', page='lost-found') }}">Lost & Found</a></li>
+      <li><a href="{{ url_for('render_page', page='login') }}" id="loginLink">Login / Signup</a></li>
+      <li><a href="{{ url_for('render_page', page='myadoptions') }}">My Adoptions</a></li>
+
+      <li id="logoutItem" style="display:none;">
+        <a href="javascript:void(0)" id="logoutLink" style="color:var(--secondary);">Logout</a>
+      </li>
+
+      <li>
+        <select id="languageSelect" onchange="changeLanguage(this.value)"
+          style="background:var(--primary-light);color:white;padding:0.5rem;border:none;border-radius:var(--radius);">
+          <option value="en">English</option>
+          <option value="hi">हिन्दी</option>
+          <option value="kn">ಕನ್ನಡ</option>
+        </select>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ✅ Page Header -->
+  <header class="hero">
+    <h1>Support Our Mission</h1>
+    <p>Your donation helps save and shelter animals in need 🐾</p>
+  </header>
+
+  <!-- ✅ Main Donate Section -->
+  <div class="donate-container" style="max-width:800px;margin:2rem auto;padding:2rem;">
+
+    <!-- Donation options -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;margin-bottom:2rem;">
+
+      <div style="background:white;padding:2rem;border-radius:var(--radius);box-shadow:var(--shadow);text-align:center;">
+        <div style="font-size:2rem;margin-bottom:1rem;">💰</div>
+        <h3 style="color:var(--primary);">One-time Donation</h3>
+        <p style="color:var(--text-light);">Support our shelter with a single donation</p>
+        <button onclick="showDonationForm('one-time')"
+          style="background:var(--primary);color:white;padding:0.8rem 1.5rem;border:none;border-radius:var(--radius);cursor:pointer;">
+          Donate Now
+        </button>
+      </div>
+
+      <div style="background:white;padding:2rem;border-radius:var(--radius);box-shadow:var(--shadow);text-align:center;">
+        <div style="font-size:2rem;margin-bottom:1rem;">📅</div>
+        <h3 style="color:var(--primary);">Monthly Support</h3>
+        <p style="color:var(--text-light);">Become a monthly supporter</p>
+        <button onclick="showDonationForm('monthly')"
+          style="background:var(--primary);color:white;padding:0.8rem 1.5rem;border:none;border-radius:var(--radius);cursor:pointer;">
+          Monthly Giving
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Donation form -->
+    <div id="donationForm" style="background:white;padding:2rem;border-radius:var(--radius);box-shadow:var(--shadow);display:none;">
+      <h2 id="formTitle" style="color:var(--primary);">Make a Donation</h2>
+
+      <form id="donateForm">
+        <div style="margin-bottom:1rem;">
+          <label>Donation Amount</label>
+          <div style="display:flex;gap:1rem;flex-wrap:wrap;margin-top:0.5rem;">
+            <button type="button" class="amount-btn" data-amount="25">$25</button>
+            <button type="button" class="amount-btn" data-amount="50">$50</button>
+            <button type="button" class="amount-btn" data-amount="100">$100</button>
+            <button type="button" class="amount-btn" data-amount="250">$250</button>
+
+            <input type="number" id="customAmount" placeholder="Custom" 
+              style="flex:1;padding:0.8rem;border:2px solid var(--primary-light);border-radius:var(--radius);">
+          </div>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <label>Full Name</label>
+          <input type="text" required style="width:100%;padding:0.8rem;border:2px solid var(--primary-light);border-radius:var(--radius);">
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <label>Email</label>
+          <input type="email" required style="width:100%;padding:0.8rem;border:2px solid var(--primary-light);border-radius:var(--radius);">
+        </div>
+
+        <button type="submit"
+          style="background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;padding:1rem;width:100%;border:none;border-radius:var(--radius);cursor:pointer;">
+          Complete Donation
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ✅ Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <!-- ✅ Floating Chatbot -->
+  <div id="chatbotFloatingIcon"
+    style="width:60px;height:60px;background:linear-gradient(135deg,#9b59b6,#c39bd3);
+    border-radius:50%;position:fixed;bottom:25px;right:25px;
+    display:none;justify-content:center;align-items:center;cursor:pointer;
+    box-shadow:0 5px 15px rgba(0,0,0,0.3);z-index:9999;">
+    <span style="font-size:28px;">🤖</span>
+  </div>
+
+  <div id="chatbotPanel"
+    style="width:350px;height:500px;background:white;border-radius:20px;
+    position:fixed;bottom:100px;right:25px;display:none;flex-direction:column;
+    overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.25);z-index:10000;">
+
+    <div style="padding:15px;background:#9b59b6;color:white;display:flex;align-items:center;gap:10px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/620/620851.png"
+           style="width:36px;height:36px;border-radius:50%;border:2px solid white;">
+      <strong>PetVerse AI Assistant 🐾</strong>
+    </div>
+
+    <div id="chatMessagesAI" style="flex:1;padding:10px;overflow-y:auto;background:#f8f0ff;"></div>
+
+    <div style="padding:10px;background:white;display:flex;gap:8px;">
+      <input id="chatInputAI" type="text" placeholder="Type your message…"
+             style="flex:1;padding:10px;border-radius:15px;border:1px solid #d5c4e6;">
+      <button id="sendChatBtnAI"
+        style="background:#9b59b6;color:white;border:none;padding:10px 14px;border-radius:14px;">➤</button>
+    </div>
+  </div>
+
+  <!-- ✅ Flask-compatible JS -->
+  <script src="{{ url_for('static', filename='header.js') }}"></script>
+  <script src="{{ url_for('static', filename='chatbot_floating.js') }}"></script>
+
+  <script>
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 3000);
+    }
+
+    function showDonationForm(type) {
+      const user = localStorage.getItem("petpal_user");
+      if (!user) {
+        showToast("Please login to make a donation");
+        return;
+      }
+
+      const form = document.getElementById("donationForm");
+      const title = document.getElementById("formTitle");
+
+      title.textContent = type === "monthly" ? "Become a Monthly Supporter" : "Make a Donation";
+      form.style.display = "block";
+      form.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // Amount buttons
+    document.querySelectorAll(".amount-btn").forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll(".amount-btn").forEach(b => b.style.background = "");
+        btn.style.background = "var(--primary-light)";
+        btn.style.color = "white";
+        document.getElementById("customAmount").value = btn.dataset.amount;
+      };
+    });
+
+    // Submit donation
+    document.getElementById("donateForm").addEventListener("submit", e => {
+      e.preventDefault();
+      showToast("Thank you for your donation! ❤️🐾");
+      document.getElementById("donationForm").style.display = "none";
+      e.target.reset();
+    });
+  </script>
+
+</body>
+</html>
